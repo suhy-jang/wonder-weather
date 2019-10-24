@@ -1,0 +1,9 @@
+1. html first js second build
+2. concept: outdoor weather.
+   - wind speed / deg,
+   - temp(celcius, fah),
+   - condition, icon,
+   - pressure
+   - sunrise / sunset time(hour, minutes)
+   - weekdays
+3. key : save in json file

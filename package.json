@@ -1,5 +1,5 @@
 {
-  "name": "weather",
+  "name": "weather-wander",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
@@ -14,24 +14,29 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shjang7/weather.git"
+    "url": "git+https://github.com/shjang7/weather-wander.git"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
+    "babel-core": "^6.26.3",
     "babel-loader": "^8.0.6",
+    "babel-polyfill": "^6.26.0",
     "eslint": "^6.5.1",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
+    "regenerator-runtime": "^0.13.3",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.1"
   },
-  "dependencies": {},
-  "bugs": {
-    "url": "https://github.com/shjang7/weather/issues"
+  "dependencies": {
+    "dotenv": "^8.2.0"
   },
-  "homepage": "https://github.com/shjang7/weather#readme"
+  "bugs": {
+    "url": "https://github.com/shjang7/weather-wander/issues"
+  },
+  "homepage": "https://github.com/shjang7/weather-wander#readme"
 }
