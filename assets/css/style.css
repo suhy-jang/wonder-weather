@@ -69,6 +69,7 @@ input {
 #weather1 {
   margin: -1rem -1rem 1rem -1rem;
   border: none;
+  visibility: hidden;
 }
 
 .weather:not(:first-child) {
@@ -106,7 +107,7 @@ input {
   margin: 0;
 }
 
-.weather-description:last-child {
+/* .weather-description:last-child {
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid gray;
@@ -118,4 +119,4 @@ input {
   .weather-description:last-child {
     text-align: center;
   }
-}
+} */
