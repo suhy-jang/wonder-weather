@@ -4,6 +4,7 @@ const $inputCity = document.getElementById('city');
 const $search = document.getElementById('search');
 const $weather = document.getElementById('weather');
 const $currWeatherDiv = document.getElementById('weather1');
+const $loadingAnimation = document.getElementById('loading-animation');
 const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const getIconUrl = (icon) => `http://openweathermap.org/img/wn/${icon}@2x.png`;
 
@@ -143,6 +144,7 @@ const createNthDayHtml = (listAll, a) => {
 export const renderForecast = (forecast) => {
   // main
   // console.log(forecast);
+  $loadingAnimation.classList.add('d-none');
   const cityContent = createCityHTML(forecast.city);
   const weatherContent = createWeatherHTML(forecast.list);
   $weatherDivAll[0].appendChild(cityContent);
@@ -174,4 +176,5 @@ export const resetHTML = () => {
     }
     div.style.visibility = 'visible';
   });
+  $loadingAnimation.classList.remove('d-none');
 }
