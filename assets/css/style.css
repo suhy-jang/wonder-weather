@@ -61,12 +61,12 @@ input {
 
 .weather {
   border: 1px solid black;
-  border-radius: 5px;
   box-sizing: border-box;
   white-space: default;
   padding: 0.5rem;
   visibility: hidden;
   color: white;
+  border-radius: 5px;
 }
 
 #search,
@@ -76,7 +76,7 @@ input {
 
 #search {
   border-radius: 2rem 2rem 0 0;
-  margin: -1rem -1rem 0 -1rem;
+  margin: -1.5rem -1rem 0 -1rem;
   box-sizing: border-box;
   padding-top: 5rem;
   padding-bottom: 5rem;
@@ -94,6 +94,7 @@ input {
   margin: -1rem -1rem 1rem -1rem;
   border: none;
   padding: 1.5rem;
+  border-radius: 0;
 }
 
 .weather:not(:first-child) {
