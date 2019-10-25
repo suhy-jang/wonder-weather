@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zxx">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=devise-width,height=device-height, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./../assets/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./../assets/css/animation.css">
+    <link rel="stylesheet" type="text/css" href="./../assets/css/toggle.css">
+    <link rel="stylesheet" type="text/css" href="./../assets/css/style.css">
+    <title>Wonder Weather</title>
+  </head>
+  <body>
+    <div class="container row">
+      <section id="search">
+        <h2 class="header">Wonder Weather</h2>
+        <form>
+          <input type="text" id="city" placeholder="Enter City">
+          <div>
+            <div>Temperature</div>
+            <div>(Celsius or Fahrenheit)</div>
+            <label class="switch">
+              <input type="checkbox" id="unit" checked>
+              <span class="slider round">C F</span>
+            </label>
+          </div>
+        </form>
+        <div class="no-info d-none">no info</div>
+      </section>
+      <section id="weather" class="row">
+        <h2 class="d-none">weather for Seoul, South Korea</h2>
+        <div class="weather row" id="weather1">
+          <div class="col-md-6 weather-description">
+            <h3>Thursday</h3>
+            <div>24.Oct.2019</div>
+            <div>Seoul, South Korea</div>
+            <div>Daytime: 6:48 - 17:44</div>
+          </div>
+          <div class="col-md-6 weather-description">
+            <h1>(Sun)</h1>
+            <h2>10 / 15 °C</h2>
+            <div>Sunny</div>
+            <div><i class="fas fa-location-arrow"></i> 17m/s</div>
+            <div><i class="fas fa-tint"></i> 50 %</div>
+            <div>1019 hPa</div>
+          </div>
+        </div>
+        <div class="weather col-md-3 col-sm-6" id="weather2">
+          <div>(cloudy)</div>
+          <div>Fri</div>
+          <div>8 / 18 °C</div>
+          <div><i class="fas fa-location-arrow"></i> 17m/s</div>
+          <div>1019 hPa</div>
+        </div>
+        <div class="weather col-md-3 col-sm-6" id="weather3">
+          <div>(sunny)</div>
+          <div>Sat</div>
+          <div>12 / 19 °C</div>
+          <div><i class="fas fa-location-arrow"></i> 17m/s</div>
+          <div>1019 hPa</div>
+        </div>
+        <div class="weather col-md-3 col-sm-6" id="weather4">
+          <div>(cloudy)</div>
+          <div>Sun</div>
+          <div>9 / 14 °C</div>
+          <div><i class="fas fa-location-arrow"></i> 17m/s</div>
+          <div>1019 hPa</div>
+        </div>
+        <div class="weather col-md-3 col-sm-6" id="weather5">
+          <div>(cloudy)</div>
+          <div>Mon</div>
+          <div>10 / 19 °C</div>
+          <div><i class="fas fa-location-arrow"></i> 17m/s</div>
+          <div>1019 hPa</div>
+        </div>
+        <div id="loading-animation" class="d-none">
+          <div id="dot"></div>
+            <div class="step" id="s1"></div>
+            <div class="step" id="s2"></div>
+            <div class="step" id="s3"></div>
+          </div>
+          <h4 class="d-none">Loader</h4>
+        </div>
+      </section>
+    </div>
+		<script src="main.js"></script>
+  </body>
+</html>

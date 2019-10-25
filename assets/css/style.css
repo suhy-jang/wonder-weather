@@ -1,0 +1,132 @@
+body {
+  max-width: 1900px;
+  margin-left: auto;
+  margin-right: auto;
+  font: 300 18px/1.4 'Work Sans', sans-serif;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  background-color: black;
+}
+
+.d-none {
+  display: none;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.fa-location-arrow {
+  margin-right: 0.5rem;
+}
+
+.fa-tint {
+  margin-left: 0.5rem;
+}
+
+img {
+  max-width: 100%;
+}
+
+input {
+  max-width: calc(100% - 2rem);
+}
+
+.row [class*=col-] {
+  box-sizing: border-box;
+  vertical-align: middle;
+  width: 100%;
+  display: inline-block;
+}
+
+@media (min-width: 768px) { /* md */
+  .row .col-md-6 {
+    width: calc(50% - 0.5rem);
+  }
+
+  .row .col-md-3 {
+    width: calc(25% - 0.5rem);
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .row .col-sm-6 {
+    width: calc(50% - 0.5rem);
+  }
+}
+
+.weather {
+  border: 1px solid black;
+  box-sizing: border-box;
+  white-space: default;
+  padding: 0.5rem;
+  visibility: hidden;
+  color: white;
+  border-radius: 5px;
+}
+
+#search,
+#weather1 {
+  background-color: #6e596e;
+}
+
+#search {
+  border-radius: 2rem 2rem 0 0;
+  margin: -1.5rem -1rem 0 -1rem;
+  box-sizing: border-box;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  color: white;
+}
+
+#search input {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+  padding: 0.5rem;
+}
+
+#weather1 {
+  margin: -1rem -1rem 1rem -1rem;
+  border: none;
+  padding: 1.5rem;
+  border-radius: 0;
+}
+
+.weather:not(:first-child) {
+  background-color: #402040;
+  text-align: left;
+}
+
+.weather:not(:first-child) > div {
+  display: inline-block;
+}
+
+@media (min-width: 768px) {
+  .weather:not(:first-child) {
+    text-align: center;
+  }
+}
+
+.container {
+  box-sizing: border-box;
+  padding: 1.5rem 1rem;
+  width: 40rem;
+  max-width: 100%;
+  min-height: 100vh;
+  border-radius: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  background-color: #300030;
+}
+
+.container h2,
+.weather-description h1,
+.weather-description h3 {
+  margin: 0;
+}
