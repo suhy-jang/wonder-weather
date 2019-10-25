@@ -28,7 +28,7 @@ const sunsetTime = (forecast) => {
 
 const drawText = (tag, text) => {
   const obj = document.createElement(tag);
-  obj.textContent = text;
+  obj.appendChild(document.createTextNode(text));
   return obj;
 }
 
@@ -79,16 +79,28 @@ const drawWind = (forecast, i) => {
   return container;
 }
 
+const drawHumidity = (forecast, a) => {
+  const container = document.createElement('div');
+  const icon = document.createElement('i');
+  const percentage = document.createTextNode(`${forecast.list[a].main.humidity} %`);
+  icon.classList.add('fas', 'fa-tint');
+  container.appendChild(icon);
+  container.appendChild(percentage);
+  // console.log(container, icon, percentage);
+  return container;
+}
+
 const createWeatherHTML = (forecast) => {
   const container = document.createElement('div');
   container.classList.add('col-md-6', 'weather-description');
 
-  const a = 0; //getIndex(forecast, 0);
+  const a = 0;
   container.appendChild(drawIconImage(forecast, a));
   const { maxTemp, minTemp } = minMaxDegree(forecast, a);
   container.appendChild(drawText('h2', `${minTemp} / ${maxTemp} °C`));
   container.appendChild(drawText('div', forecast.list[a].weather[0].main));
   container.appendChild(drawWind(forecast, a));
+  container.appendChild(drawHumidity(forecast, a));
   container.appendChild(drawText('div', `${forecast.list[a].main.pressure} hPa`));
   return container;
 }
@@ -100,6 +112,7 @@ const createNthDayHtml = (forecast, a) => {
   const day = drawText('div', weekDays[date%7]);
   const temp = drawText('div', `${minTemp} / ${maxTemp} °C`);
   const wind = drawWind(forecast, a);
+  const humidity = drawHumidity(forecast, a);
   const pressure = drawText('div', `${forecast.list[a].main.pressure}hPa`);
   const first = document.createElement('div');
   first.appendChild(icon);
@@ -107,6 +120,7 @@ const createNthDayHtml = (forecast, a) => {
   second.appendChild(day);
   second.appendChild(temp);
   second.appendChild(wind);
+  second.appendChild(humidity);
   second.appendChild(pressure);
   return { first, second };
 }
