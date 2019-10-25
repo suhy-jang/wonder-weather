@@ -76,6 +76,10 @@ input {
   padding-bottom: 5rem;
 }
 
+#search .header {
+  color: white;
+}
+
 #search input {
   margin-top: 1rem;
   margin-bottom: 1rem;

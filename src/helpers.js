@@ -1,28 +1,31 @@
 const kelvinToCelsius = k => (k - 273.15).toFixed(0);
 const $weatherDivAll = document.querySelectorAll('.weather');
 const $inputCity = document.getElementById('city');
-// const $container = document.querySelector('.container');
 const $search = document.getElementById('search');
 const $weather = document.getElementById('weather');
 const $currWeatherDiv = document.getElementById('weather1');
 const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const getIconUrl = (icon) => `http://openweathermap.org/img/wn/${icon}@2x.png`;
 
-const getSunTime = (forecast, { first, second }) => {
-  const offsetDiff = new Date().getTimezoneOffset() * 60 + forecast.city.timezone;
-  const date = new Date((forecast[first][second] + offsetDiff)* 1000);
+const locationDate = (city, time) => {
+  const offsetDiff = new Date().getTimezoneOffset() * 60 + city.timezone;
+  return new Date((time + offsetDiff)* 1000);
+}
+
+const getSunTime = (city, { sunOption }) => {
+  const date = locationDate(city, city[sunOption]);
   const hours = date.getHours();
   const min = "0" + date.getMinutes();
   return { hours, min };
 }
 
-const sunriseTime = (forecast) => {
-  const { hours, min } = getSunTime(forecast, { first: 'city', second: 'sunrise' });
+const sunriseTime = (city) => {
+  const { hours, min } = getSunTime(city, { sunOption: 'sunrise' });
   return `${hours}:${min.substr(-2)}`;
 }
 
 const sunsetTime = (forecast) => {
-  const { hours, min } = getSunTime(forecast, { first: 'city', second: 'sunset' });
+  const { hours, min } = getSunTime(forecast, { sunOption: 'sunset' });
   return `${hours}:${min.substr(-2)}`;
 }
 
@@ -32,104 +35,109 @@ const drawText = (tag, text) => {
   return obj;
 }
 
-const createCityHTML = (forecast) => {
+const daylight = (city) => {
+  const text = `Daylight: ${sunriseTime(city)} - ${sunsetTime(city)}`;
+  return drawText('div', text);
+}
+
+Date.prototype.mmdd = function() {
+  var mm = this.getMonth() + 1; // getMonth() is zero-based
+  var dd = this.getDate();
+
+  return [(mm>9 ? '' : '0') + mm,
+          (dd>9 ? '' : '0') + dd
+        ].join(' / ');
+};
+
+const createCityHTML = (city) => {
   const container = document.createElement('div');
   container.classList.add('col-md-6', 'weather-description');
-  const header = document.createElement('h3');
-  header.textContent = weekDays[(new Date()).getDay()];
-  container.appendChild(header);
+  const header = drawText('h3', weekDays[(new Date()).getDay()]);
 
-  const sunTime = document.createElement('div');
-  sunTime.textContent = `Daylight: ${sunriseTime(forecast)} - ${sunsetTime(forecast)}`;
-  container.appendChild(sunTime);
+  container.appendChild(header);
+  container.appendChild(drawText('div', locationDate(city, city.sunrise).mmdd()));
+  container.appendChild(drawText('div', `${city.name}, ${city.country}`));
+  container.appendChild(daylight(city));
   return container;
 }
 
-const drawIconImage = (forecast, i) => {
-  let icon = forecast.list[i].weather[0].icon;
+const drawIconImage = (weather) => {
+  let icon = weather.icon;
   if (icon === '01n') icon = '01d';
-  const iconUrl = getIconUrl(icon);
   const image = document.createElement('img');
-  image.src = iconUrl;
+  image.src = getIconUrl(icon);
   return image;
 }
 
-const minMaxDegree = (forecast, i) => {
-  const maxTemp = forecast.list[i].main.temp_max;
-  const minTemp = forecast.list[i].main.temp_min;
-  return {
-    maxTemp: kelvinToCelsius(maxTemp),
-    minTemp: kelvinToCelsius(minTemp),
-  };
+const minMaxDegree = (main) => {
+  const maxTemp = kelvinToCelsius(main.temp_max);
+  const minTemp = kelvinToCelsius(main.temp_min);
+  return `${minTemp} / ${maxTemp} °C`;
 }
 
 const drawWindDirection = (deg) => {
   const direction = document.createElement('i');
   direction.classList.add('fas', 'fa-location-arrow');
-  direction.style.transform = `rotate(${deg+180-45}deg)`;
+  direction.style.transform = `rotate(${ deg + 180 - 45 }deg)`; // wind from(180), original icon(45)
   return direction;
 }
 
-const drawWind = (forecast, i) => {
-  const deg = forecast.list[i].wind.deg;
-  const windSpeed = forecast.list[i].wind.speed;
+const drawWind = (wind) => {
+  const deg = wind.deg;
+  const windSpeed = wind.speed;
   const container = document.createElement('div');
   container.appendChild(drawWindDirection(deg));
   container.appendChild(document.createTextNode(`${windSpeed}m/s`));
   return container;
 }
 
-const drawHumidity = (forecast, a) => {
+const drawHumidity = (main) => {
   const container = document.createElement('div');
   const icon = document.createElement('i');
-  const percentage = document.createTextNode(`${forecast.list[a].main.humidity} %`);
+  const percentage = document.createTextNode(`${main.humidity} %`);
   icon.classList.add('fas', 'fa-tint');
   container.appendChild(icon);
   container.appendChild(percentage);
-  // console.log(container, icon, percentage);
   return container;
 }
 
-const createWeatherHTML = (forecast) => {
+const drawPressure = (main) => {
+  return `${main.pressure} hPa`;
+}
+
+const createWeatherHTML = (listAll) => {
   const container = document.createElement('div');
   container.classList.add('col-md-6', 'weather-description');
 
-  const a = 0;
-  container.appendChild(drawIconImage(forecast, a));
-  const { maxTemp, minTemp } = minMaxDegree(forecast, a);
-  container.appendChild(drawText('h2', `${minTemp} / ${maxTemp} °C`));
-  container.appendChild(drawText('div', forecast.list[a].weather[0].main));
-  container.appendChild(drawWind(forecast, a));
-  container.appendChild(drawHumidity(forecast, a));
-  container.appendChild(drawText('div', `${forecast.list[a].main.pressure} hPa`));
+  const list = listAll[0];
+  container.appendChild(drawIconImage(list.weather[0]));
+  container.appendChild(drawText('h2', minMaxDegree(list.main)));
+  container.appendChild(drawText('div', list.weather[0].main));
+  container.appendChild(drawWind(list.wind));
+  container.appendChild(drawHumidity(list.main));
+  container.appendChild(drawText('div', drawPressure(list.main)));
   return container;
 }
 
 const createNthDayHtml = (forecast, a) => {
+  const list = forecast.list[a];
   const date = (new Date()).getDay() + Math.floor(a/8);
-  const { maxTemp, minTemp } = minMaxDegree(forecast, a);
-  const icon = drawIconImage(forecast, a);
-  const day = drawText('div', weekDays[date%7]);
-  const temp = drawText('div', `${minTemp} / ${maxTemp} °C`);
-  const wind = drawWind(forecast, a);
-  const humidity = drawHumidity(forecast, a);
-  const pressure = drawText('div', `${forecast.list[a].main.pressure}hPa`);
   const first = document.createElement('div');
-  first.appendChild(icon);
   const second = document.createElement('div');
-  second.appendChild(day);
-  second.appendChild(temp);
-  second.appendChild(wind);
-  second.appendChild(humidity);
-  second.appendChild(pressure);
+  first.appendChild(drawIconImage(list.weather[0]));
+  second.appendChild(drawText('div', weekDays[date%7]));
+  second.appendChild(drawText('div', minMaxDegree(list.main)));
+  second.appendChild(drawWind(list.wind));
+  second.appendChild(drawHumidity(list.main));
+  second.appendChild(drawText('div', drawPressure(list.main)));
   return { first, second };
 }
 
 export const renderForecast = (forecast) => {
   // main
-  console.log(forecast);
-  const cityContent = createCityHTML(forecast);
-  const weatherContent = createWeatherHTML(forecast);
+  // console.log(forecast);
+  const cityContent = createCityHTML(forecast.city);
+  const weatherContent = createWeatherHTML(forecast.list);
   $weatherDivAll[0].appendChild(cityContent);
   $weatherDivAll[0].appendChild(weatherContent);
   // next days
@@ -144,18 +152,15 @@ export const submit = () => {
   return $inputCity;
 }
 
-export const getCityInput = () => {
+export const getInput = () => {
   const value = $inputCity.value;
   $inputCity.value = '';
   return value;
 }
 
 export const resetHTML = () => {
-  // while ($weather.firstChild) {
-  //   $weather.removeChild($weather.firstChild);
-  // };
   $search.style.padding = 0;
-  $search.querySelector('h2').style.display = 'none';
+  $search.querySelector('#search .header').style.display = 'none';
   $weatherDivAll.forEach(div => {
     while(div.firstChild) {
       div.removeChild(div.firstChild);
