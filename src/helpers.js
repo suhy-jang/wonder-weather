@@ -69,10 +69,17 @@ const drawIconImage = (weather) => {
   return image;
 }
 
-const minMaxDegree = (main) => {
-  const maxTemp = kelvinToCelsius(main.temp_max);
-  const minTemp = kelvinToCelsius(main.temp_min);
-  return `${minTemp} / ${maxTemp} °C`;
+const minMaxDegree = (listAll, index) => {
+  let max;
+  let min;
+  for(let i = index; i < index + 8; i++) {
+    const currMax = listAll[i].main.temp_max;
+    const currMin = listAll[i].main.temp_min;
+    if (!max || max < currMax) max = currMax;
+    if (!min || min > currMin) min = currMin;
+    if (listAll[i].dt_txt.split(' ')[1].split(':')[0] === '21') break;
+  }
+  return `${kelvinToCelsius(min)} / ${kelvinToCelsius(max)} °C`;
 }
 
 const drawWindDirection = (deg) => {
@@ -87,7 +94,7 @@ const drawWind = (wind) => {
   const windSpeed = wind.speed;
   const container = document.createElement('div');
   container.appendChild(drawWindDirection(deg));
-  container.appendChild(document.createTextNode(`${windSpeed}m/s`));
+  container.appendChild(document.createTextNode(`${windSpeed} m/s`));
   return container;
 }
 
@@ -111,7 +118,7 @@ const createWeatherHTML = (listAll) => {
 
   const list = listAll[0];
   container.appendChild(drawIconImage(list.weather[0]));
-  container.appendChild(drawText('h2', minMaxDegree(list.main)));
+  container.appendChild(drawText('h2', minMaxDegree(listAll, 0)));
   container.appendChild(drawText('div', list.weather[0].main));
   container.appendChild(drawWind(list.wind));
   container.appendChild(drawHumidity(list.main));
@@ -119,14 +126,14 @@ const createWeatherHTML = (listAll) => {
   return container;
 }
 
-const createNthDayHtml = (forecast, a) => {
-  const list = forecast.list[a];
+const createNthDayHtml = (listAll, a) => {
+  const list = listAll[a];
   const date = (new Date()).getDay() + Math.floor(a/8);
   const first = document.createElement('div');
   const second = document.createElement('div');
   first.appendChild(drawIconImage(list.weather[0]));
   second.appendChild(drawText('div', weekDays[date%7]));
-  second.appendChild(drawText('div', minMaxDegree(list.main)));
+  second.appendChild(drawText('div', minMaxDegree(listAll, a)));
   second.appendChild(drawWind(list.wind));
   second.appendChild(drawHumidity(list.main));
   second.appendChild(drawText('div', drawPressure(list.main)));
@@ -142,7 +149,7 @@ export const renderForecast = (forecast) => {
   $weatherDivAll[0].appendChild(weatherContent);
   // next days
   for(let i = 1; i < 5; i++) {
-    const { first, second } = createNthDayHtml(forecast, i * 8);
+    const { first, second } = createNthDayHtml(forecast.list, i * 8);
     $weatherDivAll[i].appendChild(first);
     $weatherDivAll[i].appendChild(second);
   }
