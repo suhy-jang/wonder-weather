@@ -53,6 +53,12 @@ input {
   }
 }
 
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .row .col-sm-6 {
+    width: calc(50% - 0.5rem);
+  }
+}
+
 .weather {
   border: 1px solid black;
   border-radius: 5px;
@@ -66,8 +72,6 @@ input {
 #search,
 #weather1 {
   background-color: #6e596e;
-  /* background-color: #806080; */
-  /* background-color: #800080; */
 }
 
 #search {
@@ -94,7 +98,6 @@ input {
 
 .weather:not(:first-child) {
   background-color: #402040;
-  /* background-color: #221122; */
   text-align: left;
 }
 
@@ -126,62 +129,3 @@ input {
 .weather-description h3 {
   margin: 0;
 }
-
-#loading-animation {
-  margin: 0 -60px -45px;
-  width: 120px;
-  height: 90px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-}
-
-#dot {
-  background: #FFF;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  bottom: 30px;
-  left: 27px;
-  transform-origin: center bottom;
-  animation: dot .6s ease-in-out infinite;
-}
-
-@-webkit-keyframes dot {
- 0% { transform: scale(1,.7) }
- 20% { transform: scale(.7,1.2) }
- 40% { transform: scale(1,1)}
- 50% { bottom: 100px;}
- 46% { transform: scale(1,1)}
- 80% { transform: scale(.7,1.2) }
- 90% { transform: scale(.7,1.2) }
- 100% { transform: scale(1,.7) }
-}
-
-.step {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  border-top: 2px solid #FFF;
-  top: 0;
-  right:0;
-}
-
-@-webkit-keyframes anim {
-    0% {
-      opacity: 0;
-      top: 0;
-      right: 0;
-    }
-    50% { opacity: 1; }
-    100% {
-    top: 90px;
-    right: 90px;
-    opacity: 0;
-  }
-}
-
-#s1 { animation: anim 1.8s linear infinite; }
-#s2 { animation: anim 1.8s linear infinite -.6s; }
-#s3 { animation: anim 1.8s linear infinite -1.2s; }

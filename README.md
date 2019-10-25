@@ -14,7 +14,7 @@ Find it at [here](https://www.theodinproject.com/courses/javascript/lessons/weat
 
 ## Deployment
 
-- [Online Deployment](https://js-weather-suh.netlify.com/dist/index.html)
+- [Online Deployment](https://wonder-weather.netlify.com/dist/index.html)
 
 ## Contributors
 

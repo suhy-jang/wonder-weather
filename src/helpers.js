@@ -12,7 +12,7 @@ let $kelvinTemperatureAll;
 
 const customUnit = () => ($inputToggle.checked ? '°C' : '°F');
 
-const kelvinToCustomUnit = (k) => ($inputToggle.checked ? kelvinToCelsius(k) : kelvinToFahrenheit(k));
+const kelvinToCustomUnit = k => ($inputToggle.checked ? kelvinToCelsius(k) : kelvinToFahrenheit(k));
 
 const locationDate = (city, time) => {
   const offsetDiff = new Date().getTimezoneOffset() * 60 + city.timezone;
@@ -75,6 +75,7 @@ const drawIconImage = (weather) => {
   if (icon === '01n') icon = '01d';
   const image = document.createElement('img');
   image.src = getIconUrl(icon);
+  image.alt = 'no info';
   return image;
 };
 
@@ -170,13 +171,11 @@ export const renderForecast = (forecast) => {
     $searchNoInfo.classList.remove('d-none');
     return;
   }
-  // main
   const cityContent = createCityHTML(forecast.city);
   const weatherContent = createWeatherHTML(forecast.list);
   $weatherDivAll[0].appendChild(cityContent);
   $weatherDivAll[0].appendChild(weatherContent);
   $weatherDivAll[0].style.visibility = 'visible';
-  // next days
   for (let i = 1; i < 5; i++) {
     const { first, second } = createNthDayHtml(forecast.list, i * 8);
     $weatherDivAll[i].appendChild(first);
