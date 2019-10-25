@@ -2,6 +2,7 @@ const kelvinToCelsius = k => (k - 273.15).toFixed(0);
 const $weatherDivAll = document.querySelectorAll('.weather');
 const $inputCity = document.getElementById('city');
 const $search = document.getElementById('search');
+const $searchNoInfo = document.querySelector('.no-info');
 const $weather = document.getElementById('weather');
 const $currWeatherDiv = document.getElementById('weather1');
 const $loadingAnimation = document.getElementById('loading-animation');
@@ -16,7 +17,8 @@ const locationDate = (city, time) => {
 const getSunTime = (city, { sunOption }) => {
   const date = locationDate(city, city[sunOption]);
   const hours = date.getHours();
-  const min = "0" + date.getMinutes();
+  const sec = date.getSeconds();
+  const min = "0" + (date.getMinutes() + (sec >= 30)); // round for second
   return { hours, min };
 }
 
@@ -142,18 +144,23 @@ const createNthDayHtml = (listAll, a) => {
 }
 
 export const renderForecast = (forecast) => {
-  // main
-  // console.log(forecast);
   $loadingAnimation.classList.add('d-none');
+  if (!forecast) {
+    $searchNoInfo.classList.remove('d-none');
+    return;
+  }
+  // main
   const cityContent = createCityHTML(forecast.city);
   const weatherContent = createWeatherHTML(forecast.list);
   $weatherDivAll[0].appendChild(cityContent);
   $weatherDivAll[0].appendChild(weatherContent);
+  $weatherDivAll[0].style.visibility = 'visible';
   // next days
   for(let i = 1; i < 5; i++) {
     const { first, second } = createNthDayHtml(forecast.list, i * 8);
     $weatherDivAll[i].appendChild(first);
     $weatherDivAll[i].appendChild(second);
+    $weatherDivAll[i].style.visibility = 'visible';
   }
 }
 
@@ -174,7 +181,10 @@ export const resetHTML = () => {
     while(div.firstChild) {
       div.removeChild(div.firstChild);
     }
-    div.style.visibility = 'visible';
+    div.style.visibility = 'hidden';
   });
+  $searchNoInfo.classList.add('d-none');
   $loadingAnimation.classList.remove('d-none');
 }
+
+$inputCity.focus();

@@ -59,8 +59,8 @@ input {
   box-sizing: border-box;
   white-space: default;
   padding: 0.5rem;
-  color: white;
   visibility: hidden;
+  color: white;
 }
 
 #search,
@@ -74,15 +74,13 @@ input {
   box-sizing: border-box;
   padding-top: 5rem;
   padding-bottom: 5rem;
-}
-
-#search .header {
   color: white;
 }
 
 #search input {
   margin-top: 1rem;
   margin-bottom: 1rem;
+  padding: 0.5rem;
 }
 
 #weather1 {
