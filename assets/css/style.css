@@ -2,7 +2,7 @@ body {
   max-width: 1900px;
   margin-left: auto;
   margin-right: auto;
-  font: 300 18px/1.4 Work Sans;
+  font: 300 18px/1.4 'Work Sans', sans-serif;
   box-sizing: border-box;
   padding: 0.5rem;
   background-color: black;
@@ -25,7 +25,7 @@ body {
 }
 
 .fa-tint {
-  margin-right: 1rem;
+  margin-left: 1rem;
 }
 
 img {
@@ -65,7 +65,9 @@ input {
 
 #search,
 #weather1 {
-  background-color: #800080;
+  background-color: #6e596e;
+  /* background-color: #806080; */
+  /* background-color: #800080; */
 }
 
 #search {
@@ -80,6 +82,7 @@ input {
 #search input {
   margin-top: 1rem;
   margin-bottom: 1rem;
+  box-sizing: border-box;
   padding: 0.5rem;
 }
 
@@ -90,7 +93,8 @@ input {
 }
 
 .weather:not(:first-child) {
-  background-color: #221122;
+  background-color: #402040;
+  /* background-color: #221122; */
   text-align: left;
 }
 
@@ -107,7 +111,6 @@ input {
 .container {
   box-sizing: border-box;
   padding: 1.5rem 1rem;
-  background-color: black;
   width: 40rem;
   max-width: 100%;
   min-height: 100vh;

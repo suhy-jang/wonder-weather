@@ -1,4 +1,3 @@
 /node_modules/*
 /remove/*
-.eslintrc.json
 db-config.json

@@ -1,4 +1,4 @@
-# Weather Wander
+# Wonder Weather
 This is a Weather app focusing on the users who want to visit outdoor place.
 
 This is part of the Odin Project's Javascript Curriculum. <br />
@@ -14,7 +14,7 @@ Find it at [here](https://www.theodinproject.com/courses/javascript/lessons/weat
 
 ## Deployment
 
-- [Online Deployment](https://shjang7.github.io/weather-wander/dist/index.html)
+- [Online Deployment](https://js-weather-suh.netlify.com/dist/index.html)
 
 ## Contributors
 
@@ -22,7 +22,7 @@ This is a solo project by me: [Suhyeon Jang](https://github.com/shjang7)
 
 ## Contributing
 
-1. Fork it (https://github.com/shjang7/weather-wander/fork)
+1. Fork it (https://github.com/shjang7/wonder-weather/fork)
 2. Create your feature branch (git checkout -b feature/[choose-a-name])
 3. Commit your changes (git commit -am 'what this commit will fix/add')
 4. Push to the branch (git push origin feature/[chosen-name])

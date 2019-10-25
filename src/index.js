@@ -1,9 +1,11 @@
 import {
-  renderForecast, submit, getInput, resetHTML, initialSetHtml,
-} from './helpers'
+  renderForecast, submit, getInput, resetHTML,
+} from './helpers';
+
 const dbConfig = require('./../db-config.json');
+
 const openWeatherKey = dbConfig.OPEN_WEATHER_KEY;
-const weatherUrl = 'http://api.openweathermap.org/data/2.5/forecast';
+const weatherUrl = 'https://api.openweathermap.org/data/2.5/forecast';
 
 const getForecast = async () => {
   const urlToFetch = `${weatherUrl}?q=${getInput()}&APPID=${openWeatherKey}`;
@@ -14,16 +16,16 @@ const getForecast = async () => {
       return jsonResponse;
     }
   } catch (error) {
-    console.log(error);
+    return error;
   }
-}
+};
 
 const executeSearch = () => {
   resetHTML();
   getForecast().then(forecast => renderForecast(forecast));
-}
+};
 
-submit().addEventListener('keypress', e => {
+submit().addEventListener('keypress', (e) => {
   if (e.keyCode === 13) {
     e.preventDefault();
     executeSearch();
