@@ -1,11 +1,18 @@
 const kelvinToCelsius = k => (k - 273.15).toFixed(0);
+const kelvinToFahrenheit = k => ((k - 273.15) * 9 / 5 + 32).toFixed(0);
 const $weatherDivAll = document.querySelectorAll('.weather');
 const $inputCity = document.getElementById('city');
+const $inputToggle = document.getElementById('unit');
 const $search = document.getElementById('search');
 const $searchNoInfo = document.querySelector('.no-info');
 const $loadingAnimation = document.getElementById('loading-animation');
 const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const getIconUrl = icon => `https://openweathermap.org/img/wn/${icon}@2x.png`;
+let $kelvinTemperatureAll;
+
+const customUnit = () => ($inputToggle.checked ? '°C' : '°F');
+
+const kelvinToCustomUnit = (k) => ($inputToggle.checked ? kelvinToCelsius(k) : kelvinToFahrenheit(k));
 
 const locationDate = (city, time) => {
   const offsetDiff = new Date().getTimezoneOffset() * 60 + city.timezone;
@@ -30,15 +37,16 @@ const sunsetTime = (forecast) => {
   return `${hours}:${min.substr(-2)}`;
 };
 
-const drawText = (tag, text) => {
+const drawText = ({ tag, classes, text }) => {
   const obj = document.createElement(tag);
+  if (classes) classes.split(' ').forEach(c => obj.classList.add(c));
   obj.appendChild(document.createTextNode(text));
   return obj;
 };
 
 const daylight = (city) => {
   const text = `Daylight: ${sunriseTime(city)} - ${sunsetTime(city)}`;
-  return drawText('div', text);
+  return drawText({ tag: 'div', text });
 };
 
 Date.prototype.mmdd = function () {
@@ -53,11 +61,11 @@ Date.prototype.mmdd = function () {
 const createCityHTML = (city) => {
   const container = document.createElement('div');
   container.classList.add('col-md-6', 'weather-description');
-  const header = drawText('h3', weekDays[(new Date()).getDay()]);
+  const header = drawText({ tag: 'h3', text: weekDays[(new Date()).getDay()] });
 
   container.appendChild(header);
-  container.appendChild(drawText('div', locationDate(city, city.sunrise).mmdd()));
-  container.appendChild(drawText('div', `${city.name}, ${city.country}`));
+  container.appendChild(drawText({ tag: 'div', text: locationDate(city, city.sunrise).mmdd() }));
+  container.appendChild(drawText({ tag: 'div', text: `${city.name}, ${city.country}` }));
   container.appendChild(daylight(city));
   return container;
 };
@@ -70,6 +78,8 @@ const drawIconImage = (weather) => {
   return image;
 };
 
+const drawTemperature = ({ min, max }) => `${kelvinToCustomUnit(min)} / ${kelvinToCustomUnit(max)} ${customUnit()}`;
+
 const minMaxDegree = (listAll, index) => {
   let max;
   let min;
@@ -80,7 +90,16 @@ const minMaxDegree = (listAll, index) => {
     if (!min || min > currMin) min = currMin;
     if (listAll[i].dt_txt.split(' ')[1].split(':')[0] === '21') break;
   }
-  return `${kelvinToCelsius(min)} / ${kelvinToCelsius(max)} °C`;
+  $kelvinTemperatureAll.push({ min, max });
+  return { min, max };
+};
+
+const toggleTemperatureUnit = () => {
+  const targetAll = document.querySelectorAll('.temperature');
+  targetAll.forEach((target, i) => {
+    const { min, max } = $kelvinTemperatureAll[i];
+    target.innerHTML = drawTemperature({ min, max });
+  });
 };
 
 const drawWindDirection = (deg) => {
@@ -116,28 +135,34 @@ const createWeatherHTML = (listAll) => {
   container.classList.add('col-md-6', 'weather-description');
 
   const list = listAll[0];
+  const temperature = drawTemperature(minMaxDegree(listAll, 0));
   container.appendChild(drawIconImage(list.weather[0]));
-  container.appendChild(drawText('h2', minMaxDegree(listAll, 0)));
-  container.appendChild(drawText('div', list.weather[0].main));
+  container.appendChild(drawText({ tag: 'h2', classes: 'temperature', text: temperature }));
+  container.appendChild(drawText({ tag: 'div', text: list.weather[0].main }));
   container.appendChild(drawWind(list.wind));
   container.appendChild(drawHumidity(list.main));
-  container.appendChild(drawText('div', drawPressure(list.main)));
+  container.appendChild(drawText({ tag: 'div', text: drawPressure(list.main) }));
   return container;
 };
 
-const createNthDayHtml = (listAll, a) => {
-  const list = listAll[a];
-  const date = (new Date()).getDay() + Math.floor(a / 8);
+const createNthDayHtml = (listAll, i) => {
+  const list = listAll[i];
+  const date = (new Date()).getDay() + Math.floor(i / 8);
   const first = document.createElement('div');
   const second = document.createElement('div');
+  const temperature = drawTemperature(minMaxDegree(listAll, i));
   first.appendChild(drawIconImage(list.weather[0]));
-  second.appendChild(drawText('div', weekDays[date % 7]));
-  second.appendChild(drawText('div', minMaxDegree(listAll, a)));
+  second.appendChild(drawText({ tag: 'div', text: weekDays[date % 7] }));
+  second.appendChild(drawText({ tag: 'div', classes: 'temperature', text: temperature }));
   second.appendChild(drawWind(list.wind));
   second.appendChild(drawHumidity(list.main));
-  second.appendChild(drawText('div', drawPressure(list.main)));
+  second.appendChild(drawText({ tag: 'div', text: drawPressure(list.main) }));
   return { first, second };
 };
+
+$inputToggle.addEventListener('click', () => {
+  toggleTemperatureUnit();
+});
 
 export const renderForecast = (forecast) => {
   $loadingAnimation.classList.add('d-none');
@@ -179,6 +204,7 @@ export const resetHTML = () => {
   });
   $searchNoInfo.classList.add('d-none');
   $loadingAnimation.classList.remove('d-none');
+  $kelvinTemperatureAll = [];
 };
 
 $inputCity.focus();

@@ -8,8 +8,9 @@
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Work+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./../assets/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./../assets/css/toggle.css">
     <link rel="stylesheet" type="text/css" href="./../assets/css/style.css">
-    <title>Weather</title>
+    <title>Wonder Weather</title>
   </head>
   <body>
     <div class="container row">
@@ -17,6 +18,13 @@
         <h2 class="header">Where would you search?</h2>
         <form>
           <input type="text" id="city" placeholder="Enter City">
+          <div>
+            Temperature (Celsius or Fahrenheit)
+            <label class="switch">
+              <input type="checkbox" id="unit" checked>
+              <span class="slider round">C F</span>
+            </label>
+          </div>
         </form>
         <div class="no-info d-none">no info</div>
       </section>
