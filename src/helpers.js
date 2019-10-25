@@ -9,10 +9,10 @@ const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
 const getIconUrl = (icon) => `http://openweathermap.org/img/wn/${icon}@2x.png`;
 
 const getSunTime = (forecast, { first, second }) => {
-  const date = new Date(forecast[first][second] * 1000);
+  const offsetDiff = new Date().getTimezoneOffset() * 60 + forecast.city.timezone;
+  const date = new Date((forecast[first][second] + offsetDiff)* 1000);
   const hours = date.getHours();
   const min = "0" + date.getMinutes();
-  // console.log(forecast[first][second], hours, min);
   return { hours, min };
 }
 
@@ -39,27 +39,16 @@ const createCityHTML = (forecast) => {
   header.textContent = weekDays[(new Date()).getDay()];
   container.appendChild(header);
 
-  // const currTime = a * 3 + 12;
-  // container.appendChild(drawText('div', currTime));
   const sunTime = document.createElement('div');
-  sunTime.textContent = `Daytime: ${sunriseTime(forecast)} - ${sunsetTime(forecast)}`;
+  sunTime.textContent = `Daylight: ${sunriseTime(forecast)} - ${sunsetTime(forecast)}`;
   container.appendChild(sunTime);
   return container;
 }
 
-const getIndex = (forecast, day) => {
-  let index = 0;
-  for(let i = day*8; i < (day+1)*8; i++) {
-    if (forecast.list[i].weather[0].icon != '01n') {
-      index = i;
-      break;
-    }
-  }
-  return index;
-}
-
 const drawIconImage = (forecast, i) => {
-  const iconUrl = getIconUrl(forecast.list[i].weather[0].icon);
+  let icon = forecast.list[i].weather[0].icon;
+  if (icon === '01n') icon = '01d';
+  const iconUrl = getIconUrl(icon);
   const image = document.createElement('img');
   image.src = iconUrl;
   return image;
@@ -75,18 +64,18 @@ const minMaxDegree = (forecast, i) => {
 }
 
 const drawWindDirection = (deg) => {
-  // temp : deg not reflect
   const direction = document.createElement('i');
   direction.classList.add('fas', 'fa-location-arrow');
+  direction.style.transform = `rotate(${deg+180-45}deg)`;
   return direction;
 }
 
 const drawWind = (forecast, i) => {
-  const container = document.createElement('div');
-
-  container.appendChild(drawWindDirection(forecast.list[i].wind.deg));
+  const deg = forecast.list[i].wind.deg;
   const windSpeed = forecast.list[i].wind.speed;
-  container.textContent = `${windSpeed} m/s`;
+  const container = document.createElement('div');
+  container.appendChild(drawWindDirection(deg));
+  container.appendChild(document.createTextNode(`${windSpeed}m/s`));
   return container;
 }
 
@@ -94,38 +83,47 @@ const createWeatherHTML = (forecast) => {
   const container = document.createElement('div');
   container.classList.add('col-md-6', 'weather-description');
 
-  const a = getIndex(forecast, 0);
+  const a = 0; //getIndex(forecast, 0);
   container.appendChild(drawIconImage(forecast, a));
   const { maxTemp, minTemp } = minMaxDegree(forecast, a);
   container.appendChild(drawText('h2', `${minTemp} / ${maxTemp} °C`));
   container.appendChild(drawText('div', forecast.list[a].weather[0].main));
   container.appendChild(drawWind(forecast, a));
-  container.appendChild(drawText('div', forecast.list[a].main.pressure));
+  container.appendChild(drawText('div', `${forecast.list[a].main.pressure} hPa`));
   return container;
 }
 
-
 const createNthDayHtml = (forecast, a) => {
-  const windDeg = forecast.list[a].wind.deg;
-  console.log('wind deg: ', windDeg);
-  const windSpeed = forecast.list[a].wind.speed;
-  console.log('wind speed: ', windSpeed); // m/s
-  const maxTemp = forecast.list[a].main.temp_max;
-  console.log('max temp: ', kelvinToCelsius(maxTemp));
-  const minTemp = forecast.list[a].main.temp_min;
-  console.log('minTemp: ', kelvinToCelsius(minTemp));
-  $weatherDivAll[a-1].appendChild(drawIconImage(forecast, a));
-  const pressure = forecast.list[a].main.pressure;
+  const date = (new Date()).getDay() + Math.floor(a/8);
+  const { maxTemp, minTemp } = minMaxDegree(forecast, a);
+  const icon = drawIconImage(forecast, a);
+  const day = drawText('div', weekDays[date%7]);
+  const temp = drawText('div', `${minTemp} / ${maxTemp} °C`);
+  const wind = drawWind(forecast, a);
+  const pressure = drawText('div', `${forecast.list[a].main.pressure}hPa`);
+  const first = document.createElement('div');
+  first.appendChild(icon);
+  const second = document.createElement('div');
+  second.appendChild(day);
+  second.appendChild(temp);
+  second.appendChild(wind);
+  second.appendChild(pressure);
+  return { first, second };
 }
 
 export const renderForecast = (forecast) => {
   // main
+  console.log(forecast);
   const cityContent = createCityHTML(forecast);
   const weatherContent = createWeatherHTML(forecast);
-  $currWeatherDiv.appendChild(cityContent);
-  $currWeatherDiv.appendChild(weatherContent);
+  $weatherDivAll[0].appendChild(cityContent);
+  $weatherDivAll[0].appendChild(weatherContent);
   // next days
-
+  for(let i = 1; i < 5; i++) {
+    const { first, second } = createNthDayHtml(forecast, i * 8);
+    $weatherDivAll[i].appendChild(first);
+    $weatherDivAll[i].appendChild(second);
+  }
 }
 
 export const submit = () => {
@@ -142,6 +140,8 @@ export const resetHTML = () => {
   // while ($weather.firstChild) {
   //   $weather.removeChild($weather.firstChild);
   // };
+  $search.style.padding = 0;
+  $search.querySelector('h2').style.display = 'none';
   $weatherDivAll.forEach(div => {
     while(div.firstChild) {
       div.removeChild(div.firstChild);

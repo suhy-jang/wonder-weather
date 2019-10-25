@@ -1,4 +1,4 @@
-# Outdoorly sky
+# Weather Wander
 This is a Weather app focusing on the users who want to visit outdoor place.
 
 This is part of the Odin Project's Javascript Curriculum. <br />

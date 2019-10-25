@@ -2,9 +2,10 @@ body {
   max-width: 1900px;
   margin-left: auto;
   margin-right: auto;
-  font: 300 20px/1.4 Work Sans;
+  font: 300 18px/1.4 Work Sans;
   box-sizing: border-box;
   padding: 0.5rem;
+  background-color: black;
 }
 
 .d-none {
@@ -19,41 +20,43 @@ body {
   text-align: center;
 }
 
+.fa-location-arrow {
+  margin-right: 1rem;
+}
+
+img {
+  max-width: 100%;
+}
+
 input {
   max-width: calc(100% - 2rem);
 }
 
-#search input {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-
 .row [class*=col-] {
-  /* box-sizing: border-box; */
-  vertical-align: top;
+  box-sizing: border-box;
+  vertical-align: middle;
   width: 100%;
   display: inline-block;
 }
 
 @media (min-width: 768px) { /* md */
   .row .col-md-6 {
-    width: 48%;
-    /* width: 50%; */
+    width: calc(50% - 0.5rem);
   }
 
   .row .col-md-3 {
-    width: 23%;
-    /* width: 25%; */
+    width: calc(25% - 0.5rem);
   }
 }
 
 .weather {
   border: 1px solid black;
+  border-radius: 5px;
   box-sizing: border-box;
-  padding: 1rem;
   white-space: default;
-  /* background-color: black; */
+  padding: 0.5rem;
   color: white;
+  visibility: hidden;
 }
 
 #search,
@@ -64,17 +67,29 @@ input {
 #search {
   border-radius: 2rem 2rem 0 0;
   margin: -1rem -1rem 0 -1rem;
+  box-sizing: border-box;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+#search input {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 #weather1 {
   margin: -1rem -1rem 1rem -1rem;
   border: none;
-  visibility: hidden;
+  padding: 1.5rem;
 }
 
 .weather:not(:first-child) {
   background-color: #221122;
   text-align: left;
+}
+
+.weather:not(:first-child) > div {
+  display: inline-block;
 }
 
 @media (min-width: 768px) {
@@ -83,22 +98,17 @@ input {
   }
 }
 
-@media (max-width: 767.98px) {
-  .weather:not(:first-child) > div {
-    display: inline-block;
-  }
-}
-
 .container {
   box-sizing: border-box;
-  padding: 1rem;
+  padding: 1.5rem 1rem;
   background-color: black;
-  width: 30rem;
+  width: 40rem;
   max-width: 100%;
-  border-radius: 2rem 2rem 0 0;
+  border-radius: 2rem;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+  background-color: #300030;
 }
 
 .container h2,
@@ -106,17 +116,3 @@ input {
 .weather-description h3 {
   margin: 0;
 }
-
-/* .weather-description:last-child {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid gray;
-  width: 100%;
-  text-align: left;
-}
-
-@media (min-width: 768px) {
-  .weather-description:last-child {
-    text-align: center;
-  }
-} */
