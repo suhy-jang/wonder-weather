@@ -1,9 +1,9 @@
 #loading-animation {
-  margin: 0 -60px -45px;
+  margin: 0 -60px;
   width: 120px;
   height: 90px;
   position: absolute;
-  top: 50%;
+  top: 16rem;
   left: 50%;
 }
 
