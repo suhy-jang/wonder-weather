@@ -34,6 +34,12 @@ value: (your API key of openweathermap.org)
 $ npm install
 ```
 
+6. build and open server
+```
+$ npm run build
+$ npm run server
+```
+
 
 ## Technologies
 - Javascript: ECMAScript 2017 (es8)

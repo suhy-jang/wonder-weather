@@ -36,6 +36,18 @@ input {
   max-width: calc(100% - 2rem);
 }
 
+button {
+  cursor: pointer;
+  margin-bottom: 0.6rem;
+  max-width: calc(100% - 2rem);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .row [class*=col-] {
   box-sizing: border-box;
   vertical-align: middle;
@@ -83,11 +95,24 @@ input {
   color: white;
 }
 
-#search input {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+#search.corner {
+  padding-top: 1rem;
+  padding-bottom: 0;
+}
+
+.search {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   box-sizing: border-box;
   padding: 0.5rem;
+}
+
+.search.location {
+  width: 276px;
+  border-radius: 5px;
+  background-color: black;
+  border: 1px solid black;
+  color: white;
 }
 
 #weather1 {
