@@ -1,19 +1,19 @@
 # Wonder Weather
-This is a Weather app focusing on the users who want to visit outdoor place. Getting weather information from [https://openweathermap.org](https://openweathermap.org) API (Application Programming Interface).
+This is a Weather app focusing on the users who want to visit an outdoor place. Getting weather information from [https://openweathermap.org](https://openweathermap.org) API (Application Programming Interface).
 
 This is part of the Odin Project's Javascript Curriculum. <br />
-Find it at [here](https://www.theodinproject.com/courses/javascript/lessons/weather-app).
+Find it [here](https://www.theodinproject.com/courses/javascript/lessons/weather-app).
 
 ## Getting Started
-Since we cannot publish private api key, if you have your own api key and want to contribute, follow this below:
+Since we cannot publish private API key, if you have your API key and want to contribute, follow this below:
 
-1. create file in root directory of this project
+1. create the file in the root directory of this project
 
 ```
 $ touch db-config.json
 ```
 
-2. fill in json file
+2. fill in the JSON file
 ```
 key: OPEN_WEATHER_KEY
 value: (your API key of openweathermap.org)
