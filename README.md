@@ -1,8 +1,12 @@
 # Wonder Weather
-This is a Weather app focusing on the users who want to visit an outdoor place. Getting weather information from [https://openweathermap.org](https://openweathermap.org) API (Application Programming Interface).
+This is a Weather app focusing on the users who want to visit an outdoor place.<br />
+Since wind information is one of the important factors of outdoor activity, it has an indicator of wind direction and speed.<br />
+It gets weather information from [https://openweathermap.org](https://openweathermap.org) API (Application Programming Interface).<br />
+The main requirement is [here](https://www.theodinproject.com/courses/javascript/lessons/weather-app).
 
-This is part of the Odin Project's Javascript Curriculum. <br />
-Find it [here](https://www.theodinproject.com/courses/javascript/lessons/weather-app).
++ [concept note](./docs/memo_begin.txt)
++ screenshot
+![](./docs/screenshot.png)
 
 ## Getting Started
 Since we cannot publish private API key, if you have your API key and want to contribute, follow this below:
@@ -15,18 +19,7 @@ $ touch db-config.json
 
 2. fill in the JSON file
 ```
-key: OPEN_WEATHER_KEY
-value: (your API key of openweathermap.org)
-```
-
-3. execution directory
-```
-./dist/index.html
-```
-
-4. other javascript source files
-```
-./src/
+{ "OPEN_WEATHER_KEY": "(your API key of openweathermap.org)" }
 ```
 
 5. npm install from root directory package.json
@@ -36,10 +29,20 @@ $ npm install
 
 6. build and open server
 ```
-$ npm run build
+$ npm run start
 $ npm run server
 ```
 
+## File dependencies
+#### execution directory
+```
+./dist/index.html
+```
+
+#### other javascript source files
+```
+./src/
+```
 
 ## Technologies
 - Javascript: ECMAScript 2017 (es8)
@@ -48,7 +51,7 @@ $ npm run server
 
 ## Deployment
 
-- [Online Deployment](https://wonder-weather.netlify.com/dist/index.html)
+- [Online Deployment](https://wonder-weather.netlify.com/dist)
 
 ## Contributors
 

@@ -1,5 +1,5 @@
 {
-  "trailingComma": "es6",
+  "trailingComma": "es8",
   "semi": true,
   "singleQuote": true
 }
