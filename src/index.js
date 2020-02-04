@@ -3,7 +3,7 @@ import {
 } from './components';
 
 import {
-  getForecast, getForecastFromGeo, fetchCoordinates,
+  getForecast, getForecastFromGeo, fetchCoordinates, errorHandler,
 } from './helpers';
 
 const searchWithInput = () => {
@@ -11,11 +11,12 @@ const searchWithInput = () => {
   getForecast(getInput).then(forecast => renderForecast(forecast));
 };
 
-const searchWithGeo = () => {
+const searchWithGeo = async () => {
   resetHTML();
-  fetchCoordinates()
+  await fetchCoordinates()
     .then(coord => getForecastFromGeo(coord))
-    .then(forecast => renderForecast(forecast));
+    .then(forecast => renderForecast(forecast))
+    .catch(error => errorHandler(error.message));
 };
 
 submit().addEventListener('keypress', (e) => {
