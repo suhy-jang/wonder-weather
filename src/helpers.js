@@ -1,9 +1,9 @@
 const $dbConfig = require('./../db-config.json');
-
-const $openWeatherKey = $dbConfig.OPEN_WEATHER_KEY;
+const axios = require('axios').default;
 const $weatherUrl = 'https://api.openweathermap.org/data/2.5/forecast';
+const $openWeatherKey = $dbConfig.OPEN_WEATHER_KEY;
 
-function errorHandler(err) {
+export function errorHandler(err) {
   alert(err);
 }
 
@@ -38,18 +38,27 @@ export const getForecastFromGeo = async ({ lat, lon }) => {
   }
 };
 
-const getCurrentPosition = (options = {}) => (
-  new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(resolve, reject, options);
-  })
+const success = ({ coords: { latitude: lat, longitude: lon } }) => ({ lat, lon });
+const failure = (error) => (errorHandler(error.message));
+const getCurrentPosition = () => (
+  navigator.geolocation.getCurrentPosition(success, failure)
 );
 
 export const fetchCoordinates = async () => {
-  try {
-    const { coords } = await getCurrentPosition({ timeout: 4000 });
-    const { latitude, longitude } = coords;
-    return { lat: latitude, lon: longitude };
-  } catch (error) {
-    errorHandler(error);
+  if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+    return await axios.get('https://location.services.mozilla.com/v1/geolocate?key=test')
+      .then(({ data }) => (data.location))
+      .then(({ lat, lng }) => {
+        return { lat, lon: lng };
+      })
+      .catch(e => console.log(e.message));
+  } else {
+    try {
+      const { coords } = await getCurrentPosition({ timeout: 4000 });
+      const { latitude, longitude } = coords;
+      return { lat: latitude, lon: longitude };
+    } catch (error) {
+      errorHandler(error);
+    }
   }
 };
