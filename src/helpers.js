@@ -3,12 +3,8 @@ const axios = require('axios').default;
 const $weatherUrl = 'https://api.openweathermap.org/data/2.5/forecast';
 const $openWeatherKey = $dbConfig.OPEN_WEATHER_KEY;
 
-export function errorHandler(err) {
-  alert(err);
-}
-
-export const getForecast = async (getInput) => {
-  const urlToFetch = `${$weatherUrl}?q=${getInput()}&APPID=${$openWeatherKey}`;
+export const getForecast = async (inputText) => {
+  const urlToFetch = `${$weatherUrl}?q=${inputText}&APPID=${$openWeatherKey}`;
   const response = await fetch(urlToFetch);
   try {
     if (response.ok) {
@@ -16,49 +12,55 @@ export const getForecast = async (getInput) => {
       return jsonResponse;
     }
   } catch (error) {
-    errorHandler(error);
+    console.error(error);
   }
 };
 
-export const getForecastFromGeo = async ({ lat, lon }) => {
+export const getForecastFromGeo = async ({ latitude: lat, longitude: lon }) => {
   if (!lat || !lon) {
-    errorHandler("Sorry, browser does not support geolocation!");
+    alert('Sorry, browser does not support geolocation!');
     return;
   }
 
   const urlToFetch = `${$weatherUrl}?lat=${lat}&lon=${lon}&appid=${$openWeatherKey}`;
-  const response = await fetch(urlToFetch);
   try {
-    if (response.ok) {
-      const jsonResponse = await response.json();
-      return jsonResponse;
-    }
+    const response = await fetch(urlToFetch);
+    return response.json();
   } catch (error) {
-    errorHandler(error);
+    console.error(error);
   }
 };
 
-const success = ({ coords: { latitude: lat, longitude: lon } }) => ({ lat, lon });
-const failure = (error) => (errorHandler(error.message));
-const getCurrentPosition = () => (
-  navigator.geolocation.getCurrentPosition(success, failure)
-);
-
-export const fetchCoordinates = async () => {
-  if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-    return await axios.get('https://location.services.mozilla.com/v1/geolocate?key=test')
-      .then(({ data }) => (data.location))
-      .then(({ lat, lng }) => {
-        return { lat, lon: lng };
-      })
-      .catch(e => console.log(e.message));
-  } else {
+export const fetchCoordinates = (loading, render) => {
+  const firefoxGeo = async () => {
     try {
-      const { coords } = await getCurrentPosition({ timeout: 4000 });
-      const { latitude, longitude } = coords;
-      return { lat: latitude, lon: longitude };
-    } catch (error) {
-      errorHandler(error);
+      loading();
+      let res = await axios.get(
+        'https://location.services.mozilla.com/v1/geolocate?key=test',
+      );
+      const { lat: latitude, lng: longitude } = res.data.location;
+      res = await getForecastFromGeo({ latitude, longitude });
+      render(res);
+    } catch (err) {
+      console.error(err.message);
     }
+  };
+
+  const successInGeneral = async (p) => {
+    loading();
+    const res = await getForecastFromGeo(p.coords);
+    render(res);
+  };
+
+  if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+    return firefoxGeo();
   }
+
+  navigator.geolocation.getCurrentPosition(
+    successInGeneral,
+    error => console.error(error.message),
+    {
+      timeout: 60000,
+    },
+  );
 };
